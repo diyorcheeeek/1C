@@ -1,7 +1,7 @@
 const tg = window.Telegram?.WebApp;
 tg?.ready();
 
-/* ===== MOCK ДАННЫЕ (как из 1С) ===== */
+/* ===== ДАННЫЕ (как из 1С) ===== */
 const clients = [
   { id: 1, name: "ООО Строй Плюс" },
   { id: 2, name: "ИП Ахмедов" }
@@ -44,7 +44,6 @@ function renderProducts(list) {
     products.appendChild(d);
   });
 }
-
 renderProducts(productsData);
 
 /* ===== SEARCH (как в 1С) ===== */
@@ -70,7 +69,6 @@ function renderOrder() {
 
   order.forEach((i, index) => {
     total += i.price * i.qty;
-
     const d = document.createElement("div");
     d.className = "order-item";
     d.innerHTML = `
@@ -88,18 +86,18 @@ function renderOrder() {
   totalSpan.textContent = total;
 }
 
-function updateQty(index, value) {
-  order[index].qty = Number(value) || 1;
+function updateQty(i, v) {
+  order[i].qty = Number(v) || 1;
   renderOrder();
 }
 
-function updatePrice(index, value) {
-  order[index].price = Number(value) || 0;
+function updatePrice(i, v) {
+  order[i].price = Number(v) || 0;
   renderOrder();
 }
 
-function removeItem(index) {
-  order.splice(index, 1);
+function removeItem(i) {
+  order.splice(i, 1);
   renderOrder();
 }
 
@@ -114,9 +112,5 @@ function saveOrder() {
     alert("Список пуст");
     return;
   }
-  alert("Заказ сохранён (следующий этап — 1С)");
-}
-
-function printOrder() {
-  window.print();
+  alert("Заказ сохранён (дальше будет 1С)");
 }
