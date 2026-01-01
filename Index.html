@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Заказ покупателя</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="print.css" media="print">
+</head>
+<body>
+
+<header>
+  <h2>Заказ покупателя</h2>
+</header>
+
+<section class="block">
+  <label>Клиент</label>
+  <select id="clientSelect"></select>
+</section>
+
+<section class="block">
+  <label>Товары</label>
+  <input type="text" id="search" placeholder="Поиск товара">
+  <div id="products"></div>
+</section>
+
+<section class="block">
+  <h3>Список заказа</h3>
+  <div id="order"></div>
+  <div class="total">Итого: <span id="total">0</span> сум</div>
+</section>
+
+<footer>
+  <button onclick="saveOrder()">💾 Сохранить</button>
+  <button onclick="printOrder()">🖨 Печать</button>
+  <button class="danger" onclick="clearOrder()">🧹 Очистить</button>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
