@@ -5,7 +5,7 @@ body {
 }
 
 header {
-  background: #ffffff;
+  background: #fff;
   padding: 14px;
   text-align: center;
   font-weight: 600;
@@ -28,22 +28,46 @@ select, input {
   width: 100%;
   padding: 8px;
   margin-top: 6px;
-  font-size: 16px;
+  font-size: 15px;
 }
 
-.product, .order-item {
+.product {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-top: 6px;
 }
 
-button {
-  flex: 1;
-  padding: 14px;
-  font-size: 16px;
-  border: none;
+.product button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  font-size: 18px;
+  border-radius: 4px;
   background: #2563eb;
   color: #fff;
+  border: none;
+}
+
+.order-item {
+  display: grid;
+  grid-template-columns: 1fr 60px 80px 80px 32px;
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.order-item input {
+  padding: 4px;
+  font-size: 14px;
+  text-align: right;
+}
+
+.order-item button {
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
 }
 
 footer {
@@ -52,7 +76,16 @@ footer {
   bottom: 0;
 }
 
-button.danger {
+footer button {
+  flex: 1;
+  padding: 12px;
+  font-size: 15px;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+}
+
+footer button.danger {
   background: #dc2626;
 }
 
