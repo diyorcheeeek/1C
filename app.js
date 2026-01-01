@@ -1,7 +1,7 @@
-const tg = window.Telegram.WebApp;
-tg.ready();
+const tg = window.Telegram?.WebApp;
+tg?.ready();
 
-// mock как из 1С
+/* ===== MOCK ДАННЫЕ (как из 1С) ===== */
 const clients = [
   { id: 1, name: "ООО Строй Плюс" },
   { id: 2, name: "ИП Ахмедов" }
@@ -10,17 +10,20 @@ const clients = [
 const productsData = [
   { id: 1, name: "Цемент М500", price: 75000 },
   { id: 2, name: "Песок", price: 30000 },
-  { id: 3, name: "Кирпич", price: 1200 }
+  { id: 3, name: "Кирпич", price: 1200 },
+  { id: 4, name: "Щебень", price: 45000 }
 ];
 
 let order = [];
 
+/* ===== ELEMENTS ===== */
 const clientSelect = document.getElementById("clientSelect");
 const products = document.getElementById("products");
 const orderDiv = document.getElementById("order");
 const totalSpan = document.getElementById("total");
+const searchInput = document.getElementById("search");
 
-// клиенты
+/* ===== CLIENTS ===== */
 clients.forEach(c => {
   const o = document.createElement("option");
   o.value = c.id;
@@ -28,7 +31,7 @@ clients.forEach(c => {
   clientSelect.appendChild(o);
 });
 
-// товары
+/* ===== PRODUCTS ===== */
 function renderProducts(list) {
   products.innerHTML = "";
   list.forEach(p => {
@@ -44,6 +47,15 @@ function renderProducts(list) {
 
 renderProducts(productsData);
 
+/* ===== SEARCH (как в 1С) ===== */
+searchInput.addEventListener("input", () => {
+  const q = searchInput.value.toLowerCase();
+  renderProducts(
+    productsData.filter(p => p.name.toLowerCase().includes(q))
+  );
+});
+
+/* ===== ORDER ===== */
 function addToOrder(id) {
   const p = productsData.find(x => x.id === id);
   const row = order.find(x => x.id === id);
@@ -55,27 +67,54 @@ function addToOrder(id) {
 function renderOrder() {
   orderDiv.innerHTML = "";
   let total = 0;
-  order.forEach(i => {
+
+  order.forEach((i, index) => {
     total += i.price * i.qty;
+
     const d = document.createElement("div");
     d.className = "order-item";
     d.innerHTML = `
-      <span>${i.name} x ${i.qty}</span>
+      <span>${i.name}</span>
+      <input type="number" min="1" value="${i.qty}"
+        onchange="updateQty(${index}, this.value)">
+      <input type="number" min="0" value="${i.price}"
+        onchange="updatePrice(${index}, this.value)">
       <span>${i.price * i.qty}</span>
+      <button onclick="removeItem(${index})">✕</button>
     `;
     orderDiv.appendChild(d);
   });
+
   totalSpan.textContent = total;
 }
 
-function saveOrder() {
-  if (!order.length) return alert("Список пуст");
-  alert("Заказ сохранён (позже уйдёт в 1С)");
+function updateQty(index, value) {
+  order[index].qty = Number(value) || 1;
+  renderOrder();
 }
 
+function updatePrice(index, value) {
+  order[index].price = Number(value) || 0;
+  renderOrder();
+}
+
+function removeItem(index) {
+  order.splice(index, 1);
+  renderOrder();
+}
+
+/* ===== ACTIONS ===== */
 function clearOrder() {
   order = [];
   renderOrder();
+}
+
+function saveOrder() {
+  if (!order.length) {
+    alert("Список пуст");
+    return;
+  }
+  alert("Заказ сохранён (следующий этап — 1С)");
 }
 
 function printOrder() {
