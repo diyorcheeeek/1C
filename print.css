@@ -1,10 +1,10 @@
 @media print {
-  body {
-    font-size: 12px;
+  header, footer, input, select, button {
+    display: none !important;
   }
 
-  header, footer, input, select {
-    display: none;
+  body {
+    font-size: 12px;
   }
 
   .block {
