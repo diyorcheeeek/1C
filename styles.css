@@ -2,6 +2,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   background: #f3f4f6;
+  touch-action: manipulation; /* убираем зум жестами */
 }
 
 header {
@@ -48,9 +49,10 @@ select, input {
   color: #fff;
 }
 
+/* ===== СТРОКА ЗАКАЗА ===== */
 .order-item {
   display: grid;
-  grid-template-columns: 1fr 50px 70px 70px 28px;
+  grid-template-columns: 1fr 60px 90px 32px;
   gap: 6px;
   align-items: center;
   margin-top: 6px;
@@ -69,6 +71,7 @@ select, input {
   border-radius: 4px;
 }
 
+/* ===== FOOTER ===== */
 footer {
   display: flex;
   position: sticky;
@@ -91,4 +94,5 @@ footer .danger {
 .total {
   margin-top: 10px;
   font-weight: bold;
+  font-size: 16px;
 }
