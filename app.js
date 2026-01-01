@@ -1,7 +1,7 @@
 const tg = window.Telegram?.WebApp;
 tg?.ready();
 
-/* ===== ДАННЫЕ (как из 1С) ===== */
+/* ===== ДАННЫЕ ===== */
 const clients = [
   { id: 1, name: "ООО Строй Плюс" },
   { id: 2, name: "ИП Ахмедов" }
@@ -15,6 +15,7 @@ const productsData = [
 ];
 
 let order = [];
+let selectedClient = null;
 
 /* ===== ELEMENTS ===== */
 const clientSelect = document.getElementById("clientSelect");
@@ -23,19 +24,20 @@ const orderDiv = document.getElementById("order");
 const totalSpan = document.getElementById("total");
 const searchInput = document.getElementById("search");
 
-/* ===== СКРЫТИЕ КЛАВИАТУРЫ ===== */
-document.addEventListener("click", e => {
-  if (e.target.tagName !== "INPUT") {
-    document.activeElement.blur();
-  }
-});
-
 /* ===== CLIENTS ===== */
-clients.forEach(c => {
+clients.forEach((c, i) => {
   const o = document.createElement("option");
   o.value = c.id;
   o.textContent = c.name;
+  if (i === 0) {
+    o.selected = true;
+    selectedClient = c;
+  }
   clientSelect.appendChild(o);
+});
+
+clientSelect.addEventListener("change", () => {
+  selectedClient = clients.find(c => c.id == clientSelect.value);
 });
 
 /* ===== PRODUCTS ===== */
@@ -53,7 +55,7 @@ function renderProducts(list) {
 }
 renderProducts(productsData);
 
-/* ===== ПОИСК (как в 1С) ===== */
+/* ===== SEARCH ===== */
 searchInput.addEventListener("input", () => {
   const q = searchInput.value.toLowerCase();
   renderProducts(
@@ -61,7 +63,7 @@ searchInput.addEventListener("input", () => {
   );
 });
 
-/* ===== ЗАКАЗ ===== */
+/* ===== ORDER ===== */
 function addToOrder(id) {
   const p = productsData.find(x => x.id === id);
   const row = order.find(x => x.id === id);
@@ -76,7 +78,6 @@ function renderOrder() {
 
   order.forEach((i, index) => {
     total += i.price * i.qty;
-
     const d = document.createElement("div");
     d.className = "order-item";
     d.innerHTML = `
@@ -115,15 +116,17 @@ function clearOrder() {
 }
 
 function saveOrder() {
-  document.activeElement.blur();
   if (!order.length) {
     alert("Список пуст");
     return;
   }
-  alert("Заказ сохранён (дальше будет 1С)");
+  alert(`Заказ сохранён\nКлиент: ${selectedClient?.name}`);
 }
 
 function printOrder() {
-  document.activeElement.blur();
+  if (!window.print) {
+    alert("Печать будет через PDF (следующий этап)");
+    return;
+  }
   window.print();
 }
