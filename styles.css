@@ -3,7 +3,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   background: #f3f4f6;
   touch-action: manipulation; /* убираем зум жестами */
-}
+} 
 
 header {
   background: #fff;
