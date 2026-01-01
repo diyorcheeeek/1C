@@ -1,7 +1,7 @@
 @media print {
   header, footer, input, select, button {
     display: none !important;
-  }
+  } 
 
   body {
     font-size: 12px;
