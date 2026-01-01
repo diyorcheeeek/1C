@@ -23,6 +23,13 @@ const orderDiv = document.getElementById("order");
 const totalSpan = document.getElementById("total");
 const searchInput = document.getElementById("search");
 
+/* ===== СКРЫТИЕ КЛАВИАТУРЫ ===== */
+document.addEventListener("click", e => {
+  if (e.target.tagName !== "INPUT") {
+    document.activeElement.blur();
+  }
+});
+
 /* ===== CLIENTS ===== */
 clients.forEach(c => {
   const o = document.createElement("option");
@@ -46,7 +53,7 @@ function renderProducts(list) {
 }
 renderProducts(productsData);
 
-/* ===== SEARCH (как в 1С) ===== */
+/* ===== ПОИСК (как в 1С) ===== */
 searchInput.addEventListener("input", () => {
   const q = searchInput.value.toLowerCase();
   renderProducts(
@@ -54,7 +61,7 @@ searchInput.addEventListener("input", () => {
   );
 });
 
-/* ===== ORDER ===== */
+/* ===== ЗАКАЗ ===== */
 function addToOrder(id) {
   const p = productsData.find(x => x.id === id);
   const row = order.find(x => x.id === id);
@@ -69,6 +76,7 @@ function renderOrder() {
 
   order.forEach((i, index) => {
     total += i.price * i.qty;
+
     const d = document.createElement("div");
     d.className = "order-item";
     d.innerHTML = `
@@ -77,7 +85,6 @@ function renderOrder() {
         onchange="updateQty(${index}, this.value)">
       <input type="number" min="0" value="${i.price}"
         onchange="updatePrice(${index}, this.value)">
-      <span>${i.price * i.qty}</span>
       <button onclick="removeItem(${index})">✕</button>
     `;
     orderDiv.appendChild(d);
@@ -108,9 +115,15 @@ function clearOrder() {
 }
 
 function saveOrder() {
+  document.activeElement.blur();
   if (!order.length) {
     alert("Список пуст");
     return;
   }
   alert("Заказ сохранён (дальше будет 1С)");
+}
+
+function printOrder() {
+  document.activeElement.blur();
+  window.print();
 }
