@@ -1,0 +1,14 @@
+@media print {
+  body {
+    font-size: 12px;
+  }
+
+  header, footer, input, select {
+    display: none;
+  }
+
+  .block {
+    margin: 0;
+    padding: 0;
+  }
+}
