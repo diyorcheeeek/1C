@@ -5,14 +5,14 @@ font-family:-apple-system,BlinkMacSystemFont,sans-serif;
 background:linear-gradient(180deg,#0b1220,#020617);
 color:#fff
 } 
-.header{
+.header{ 
 height:56px;
 display:flex;
 justify-content:center;
 align-items:center;
 backdrop-filter:blur(16px);
 background:rgba(255,255,255,.06);
-font-weight:600
+font-weight:600   
 }
 .brand{font-size:18px}
 main{padding:16px;padding-bottom:100px}
