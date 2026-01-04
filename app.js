@@ -249,37 +249,101 @@ function printOrder() {
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Print</title>
+<title>Receipt</title>
+
 <style>
-  @page { size: 58mm auto; margin: 4mm; }
-  body { font-family: monospace; font-size: 12px; margin: 0; }
-  h3 { text-align: center; margin: 0 0 6px 0; }
-  .meta { margin-bottom: 6px; }
-  table { width: 100%; border-collapse: collapse; }
-  td { padding: 2px 0; }
-  .name { width: 60%; }
-  .qty { width: 15%; text-align: right; }
-  .sum { width: 25%; text-align: right; }
-  .total { border-top: 1px dashed #000; margin-top: 6px; padding-top: 4px; text-align: right; font-weight: bold; }
+  @page {
+    size: 58mm auto;
+    margin: 0;
+  }
+
+  html, body {
+    width: 58mm;
+    margin: 0;
+    padding: 0;
+    font-family: monospace;
+    font-size: 11px;
+    color: #000;
+  }
+
+  .wrap {
+    padding: 4mm;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  .line {
+    border-top: 1px dashed #000;
+    margin: 4px 0;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .name {
+    width: 60%;
+    word-break: break-word;
+  }
+
+  .qty {
+    width: 15%;
+    text-align: right;
+  }
+
+  .sum {
+    width: 25%;
+    text-align: right;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  .small {
+    font-size: 10px;
+  }
 </style>
 </head>
+
 <body onload="window.print()">
-  <h3>BRAND NAME</h3>
-  <div class="meta">
-    ${new Date().toLocaleString()}<br>
-    Админ: ${state.admin}<br>
-    Клиент: ${state.client || "—"}
-  </div>
-  <table>
+  <div class="wrap">
+
+    <div class="center bold">BRAND NAME</div>
+    <div class="center small">--------------------</div>
+
+    <div class="small">
+      ${new Date().toLocaleString()}<br>
+      Админ: ${state.admin}<br>
+      Клиент: ${state.client || "—"}
+    </div>
+
+    <div class="line"></div>
+
     ${state.order.map(i => `
-      <tr>
-        <td class="name">${i.name}</td>
-        <td class="qty">${i.qty}</td>
-        <td class="sum">${i.qty * i.price}</td>
-      </tr>
+      <div class="row">
+        <div class="name">${i.name}</div>
+        <div class="qty">${i.qty}</div>
+        <div class="sum">${i.qty * i.price}</div>
+      </div>
     `).join("")}
-  </table>
-  <div class="total">ИТОГО: ${total}</div>
+
+    <div class="line"></div>
+
+    <div class="row bold">
+      <div class="name">ИТОГО</div>
+      <div class="qty"></div>
+      <div class="sum">${total}</div>
+    </div>
+
+    <div class="center small" style="margin-top:6px">
+      Спасибо за покупку
+    </div>
+
+  </div>
 </body>
 </html>
 `;
