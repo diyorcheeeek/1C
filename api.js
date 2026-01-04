@@ -5,7 +5,7 @@ function getClients(query) {
 }
 
 function getProducts(query) {
-  return [];
+  return []; 
 }
 
 function sendOrderTo1C(order) {
