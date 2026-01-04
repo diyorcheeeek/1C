@@ -1,3 +1,16 @@
+// ===============================
+// HIDE KEYBOARD ON TAP
+// ===============================
+document.addEventListener("touchstart", hideKeyboard, { passive: true });
+document.addEventListener("mousedown", hideKeyboard);
+
+function hideKeyboard(e) {
+  const tag = e.target.tagName;
+  if (tag !== "INPUT" && tag !== "TEXTAREA") {
+    document.activeElement?.blur();
+  }
+}
+
 // TELEGRAM
 const tg = Telegram.WebApp;
 tg.ready();
