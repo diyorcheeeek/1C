@@ -1,57 +1,255 @@
-*{box-sizing:border-box}
-body{
-margin:0;
-font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-background:linear-gradient(180deg,#0b1220,#020617);
-color:#fff
-} 
-.header{ 
-height:56px;
-display:flex;
-justify-content:center;
-align-items:center;
-backdrop-filter:blur(16px);
-background:rgba(255,255,255,.06);
-font-weight:600   
-}
-.brand{font-size:18px}
-main{padding:16px;padding-bottom:100px}
-.bottom-bar{
-position:fixed;bottom:0;width:100%;height:72px;
-display:flex;justify-content:space-around;align-items:center;
-background:rgba(255,255,255,.08);backdrop-filter:blur(16px)
-}
-.bottom-bar button{
-background:none;border:none;color:#fff;font-size:22px
-}
-.bottom-bar .center{
-width:56px;height:56px;border-radius:50%;
-background:#22c55e;color:#020617;font-size:30px
-}
-input{
-width:100%;padding:10px;border-radius:10px;
-border:1px solid rgba(255,255,255,.15);
-background:rgba(255,255,255,.05);color:#fff
-}
-.table{
-width:100%;border-collapse:collapse;margin-top:12px
-}
-.table th,.table td{
-border:1px solid rgba(255,255,255,.15);
-padding:8px;font-size:14px;text-align:center
-}
-.actions{
-display:flex;gap:12px;margin-top:16px
-}
-.actions button{
-flex:1;padding:12px;border:none;border-radius:10px;font-weight:600
-}
-.green{background:#22c55e;color:#020617}
-.gray{background:#64748b;color:#fff}
-.back{
-margin-bottom:10px;background:none;border:none;color:#9ca3af
-}
-.total{
-margin-top:10px;font-size:18px;font-weight:700;text-align:right
+/* =========================
+   RESET
+========================= */
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(180deg, #0b1220 0%, #020617 100%);
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+/* =========================
+   HEADER
+========================= */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* =========================
+   MAIN VIEW
+========================= */
+#view {
+  padding: 16px;
+  padding-bottom: 110px;
+}
+
+/* =========================
+   BOTTOM BAR
+========================= */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  height: 72px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  background: rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bottom-bar button {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 22px;
+  opacity: 0.85;
+}
+
+.bottom-bar button:active {
+  opacity: 1;
+}
+
+.bottom-bar .center {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #020617;
+  font-size: 32px;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(34, 197, 94, 0.35);
+}
+
+/* =========================
+   BUTTONS
+========================= */
+button {
+  cursor: pointer;
+}
+
+button.primary {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #020617;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+button.secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* =========================
+   BACK BUTTON
+========================= */
+.back {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 14px;
+  margin-bottom: 10px;
+  padding: 4px 0;
+}
+
+/* =========================
+   INPUTS
+========================= */
+input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-top: 10px;
+
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+
+  color: #ffffff;
+  font-size: 14px;
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+input:focus {
+  outline: none;
+  border-color: rgba(34, 197, 94, 0.6);
+}
+
+/* =========================
+   TABLE
+========================= */
+.table {
+  width: 100%;
+  margin-top: 14px;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.table thead {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.table th {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.table td {
+  font-size: 14px;
+  padding: 8px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  text-align: center;
+}
+
+.table td input {
+  padding: 6px;
+  margin: 0;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* =========================
+   TOTAL
+========================= */
+#total {
+  margin-top: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: right;
+  color: #22c55e;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.actions button {
+  flex: 1;
+}
+
+/* =========================
+   LIST ITEMS (clients / history)
+========================= */
+.list-item {
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.list-item:active {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* =========================
+   HISTORY CARD
+========================= */
+.history-card {
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.history-card b {
+  font-size: 15px;
+}
+
+/* =========================
+   SCROLLBAR (optional)
+========================= */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+}
