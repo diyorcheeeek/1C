@@ -109,3 +109,17 @@ input {
   color: #fff;
   text-align: center;
 }
+
+.col-del {
+  width: 10%;
+  text-align: center;
+}
+
+.col-del button {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
