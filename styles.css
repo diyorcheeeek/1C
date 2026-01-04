@@ -139,3 +139,35 @@ input {
   margin-left: 6px;
   cursor: pointer;
 }
+
+/* фикс таблицы */
+.table {
+  table-layout: fixed;
+}
+
+/* ячейка цены */
+.col-price {
+  position: relative;
+}
+
+/* input цены с отступом под кнопку */
+.col-price input {
+  width: 100%;
+  padding-right: 26px;
+}
+
+/* КНОПКА УДАЛЕНИЯ */
+.del-btn {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+}
