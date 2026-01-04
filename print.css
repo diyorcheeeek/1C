@@ -1,14 +1,3 @@
-@media print {
-  header, footer, input, select, button {
-    display: none !important;
-  } 
-
-  body {
-    font-size: 12px;
-  }
-
-  .block {
-    margin: 0;
-    padding: 0;
-  }
+function printOrder() {
+  window.print();
 }
