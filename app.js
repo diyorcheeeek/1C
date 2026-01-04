@@ -25,6 +25,18 @@ const state = {
 };
 
 // ===============================
+// MOCK CLIENTS (1C LATER)
+// ===============================
+const CLIENTS = [
+  "ООО Ромашка",
+  "ИП Ахмад",
+  "Магазин Центр",
+  "ООО Восток",
+  "ИП Каримов",
+  "ТОО Almaz Trade"
+];
+
+// ===============================
 // VIEW HELPER
 // ===============================
 function view(html) {
@@ -51,7 +63,13 @@ function openCreate() {
   view(`
     <h2>Создать заказ</h2>
 
-    <input placeholder="Клиент">
+    <input
+      id="clientInput"
+      placeholder="Поиск клиента"
+      oninput="searchClient(this.value)"
+      autocomplete="off"
+    >
+    <div id="clientList"></div>
 
     <table class="table">
       <thead>
@@ -73,6 +91,37 @@ function openCreate() {
   `);
 
   renderOrder();
+}
+
+// ===============================
+// CLIENT SEARCH (1C STYLE)
+// ===============================
+function searchClient(query) {
+  const list = document.getElementById("clientList");
+
+  if (!query) {
+    list.innerHTML = "";
+    return;
+  }
+
+  const result = CLIENTS.filter(c =>
+    c.toLowerCase().includes(query.toLowerCase())
+  );
+
+  list.innerHTML = result.map(c => `
+    <div
+      class="list-item"
+      onclick="selectClient('${c}')"
+    >
+      ${c}
+    </div>
+  `).join("");
+}
+
+function selectClient(name) {
+  state.client = name;
+  document.getElementById("clientInput").value = name;
+  document.getElementById("clientList").innerHTML = "";
 }
 
 // ===============================
@@ -125,14 +174,11 @@ function renderOrder() {
     `;
   }).join("");
 
-  // итоговая строка
   rows += `
     <tr>
       <td class="col-name" style="font-weight:700;">ИТОГО</td>
       <td class="col-qty"></td>
-      <td class="col-price" style="font-weight:700;">
-        ${total}
-      </td>
+      <td class="col-price" style="font-weight:700;">${total}</td>
     </tr>
   `;
 
@@ -146,6 +192,7 @@ function saveOrder() {
   const order = {
     date: new Date().toLocaleString(),
     admin: state.admin,
+    client: state.client,
     items: state.order,
     total: state.order.reduce((s, i) => s + i.qty * i.price, 0)
   };
@@ -165,6 +212,7 @@ function openHistory() {
     ${state.history.map(o => `
       <div>
         ${o.date}<br>
+        ${o.client || "Без клиента"}<br>
         ${o.admin}<br>
         Итого: ${o.total}
       </div>
