@@ -237,32 +237,52 @@ function editOrder(i) {
 // PRINT
 // ===============================
 function printOrder() {
-  if (!state.order.length) return alert("Нет товаров");
+  if (!state.order.length) {
+    alert("Нет товаров для печати");
+    return;
+  }
 
   const block = document.createElement("div");
+  block.id = "printBlock";
+
   block.innerHTML = `
     <div class="print-title">BRAND NAME</div>
+
     <div class="print-meta">
-      ${new Date().toLocaleString()}<br>
+      Дата: ${new Date().toLocaleString()}<br>
       Админ: ${state.admin}<br>
-      Клиент: ${state.client||"—"}
+      Клиент: ${state.client || "—"}
     </div>
+
     <table class="table">
-      ${state.order.map(i=>`
-        <tr>
-          <td class="col-name">${i.name}</td>
-          <td class="col-qty">${i.qty}</td>
-          <td class="col-price">${i.qty*i.price}</td>
-        </tr>
-      `).join("")}
+      <tbody>
+        ${state.order.map(i => `
+          <tr>
+            <td class="col-name">${i.name}</td>
+            <td class="col-qty">${i.qty}</td>
+            <td class="col-price">${i.qty * i.price}</td>
+          </tr>
+        `).join("")}
+      </tbody>
     </table>
+
     <div class="print-total">
-      ИТОГО: ${state.order.reduce((s,i)=>s+i.qty*i.price,0)}
+      ИТОГО: ${state.order.reduce((s, i) => s + i.qty * i.price, 0)}
     </div>
   `;
+
   document.body.appendChild(block);
-  window.print();
-  setTimeout(()=>block.remove(),500);
+
+  // ⬇️ КЛЮЧЕВОЙ ФИКС
+  setTimeout(() => {
+    window.print();
+
+    // чистим после печати
+    setTimeout(() => {
+      block.remove();
+    }, 500);
+
+  }, 150);
 }
 
 // ===============================
