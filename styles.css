@@ -23,10 +23,10 @@ body {
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
-/* MAIN */
+/* VIEW */
 #view {
   padding: 16px;
-  padding-bottom: 100px;
+  padding-bottom: 110px;
 }
 
 /* BOTTOM BAR */
@@ -71,103 +71,49 @@ input {
   color: #fff;
 }
 
+/* LIST */
+.list-item {
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
 /* TABLE */
 .table {
   width: 100%;
-  border-collapse: collapse;
   margin-top: 12px;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .table th,
 .table td {
   border: 1px solid rgba(255,255,255,0.15);
   padding: 8px;
-  text-align: center;
   font-size: 14px;
-}
-
-/* ===== TABLE PROPORTIONS (BASE v1+) ===== */
-.col-name {
-  width: 50%;
-  text-align: left;
-}
-
-.col-qty {
-  width: 18%;
-}
-
-.col-price {
-  width: 32%;
-}
-
-.table input {
-  width: 100%;
-  padding: 6px;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.15);
-  background: rgba(255,255,255,0.05);
-  color: #fff;
   text-align: center;
 }
 
-.col-del {
-  width: 10%;
-  text-align: center;
-}
+.col-name { width: 50%; text-align: left; }
+.col-qty  { width: 18%; }
+.col-price{ width: 32%; position: relative; }
 
-.col-del button {
-  background: none;
-  border: none;
-  color: #ef4444;
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-/* фикс для таблицы */
-.table {
-  table-layout: fixed;
-}
-
-/* кнопка удаления внутри цены */
-.del-btn {
-  background: none;
-  border: none;
-  color: #ef4444;
-  font-size: 18px;
-  font-weight: 700;
-  margin-left: 6px;
-  cursor: pointer;
-}
-
-/* фикс таблицы */
-.table {
-  table-layout: fixed;
-}
-
-/* ячейка цены */
-.col-price {
-  position: relative;
-}
-
-/* input цены с отступом под кнопку */
 .col-price input {
   width: 100%;
   padding-right: 26px;
 }
 
-/* КНОПКА УДАЛЕНИЯ */
 .del-btn {
   position: absolute;
-  top: 50%;
   right: 6px;
+  top: 50%;
   transform: translateY(-50%);
-
   background: none;
   border: none;
   color: #ef4444;
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
-  line-height: 1;
 }
