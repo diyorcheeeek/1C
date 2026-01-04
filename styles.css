@@ -1,1 +1,57 @@
+*{box-sizing:border-box}
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+background:linear-gradient(180deg,#0b1220,#020617);
+color:#fff
+}
+.header{
+height:56px;
+display:flex;
+justify-content:center;
+align-items:center;
+backdrop-filter:blur(16px);
+background:rgba(255,255,255,.06);
+font-weight:600
+}
+.brand{font-size:18px}
+main{padding:16px;padding-bottom:100px}
+.bottom-bar{
+position:fixed;bottom:0;width:100%;height:72px;
+display:flex;justify-content:space-around;align-items:center;
+background:rgba(255,255,255,.08);backdrop-filter:blur(16px)
+}
+.bottom-bar button{
+background:none;border:none;color:#fff;font-size:22px
+}
+.bottom-bar .center{
+width:56px;height:56px;border-radius:50%;
+background:#22c55e;color:#020617;font-size:30px
+}
+input{
+width:100%;padding:10px;border-radius:10px;
+border:1px solid rgba(255,255,255,.15);
+background:rgba(255,255,255,.05);color:#fff
+}
+.table{
+width:100%;border-collapse:collapse;margin-top:12px
+}
+.table th,.table td{
+border:1px solid rgba(255,255,255,.15);
+padding:8px;font-size:14px;text-align:center
+}
+.actions{
+display:flex;gap:12px;margin-top:16px
+}
+.actions button{
+flex:1;padding:12px;border:none;border-radius:10px;font-weight:600
+}
+.green{background:#22c55e;color:#020617}
+.gray{background:#64748b;color:#fff}
+.back{
+margin-bottom:10px;background:none;border:none;color:#9ca3af
+}
+.total{
+margin-top:10px;font-size:18px;font-weight:700;text-align:right
+}
 
