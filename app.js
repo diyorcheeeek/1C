@@ -1,3 +1,45 @@
+function printOrder() {
+  if (!state.order.length) {
+    alert("Нет товаров для печати");
+    return;
+  }
+
+  const printBlock = document.createElement("div");
+  printBlock.id = "printBlock";
+  printBlock.innerHTML = `
+    <div class="print-title">BRAND NAME</div>
+
+    <div class="print-meta">
+      Дата: ${new Date().toLocaleString()}<br>
+      Админ: ${state.admin}<br>
+      Клиент: ${state.client || "—"}
+    </div>
+
+    <table class="table">
+      <tbody>
+        ${state.order.map(i => `
+          <tr>
+            <td class="col-name">${i.name}</td>
+            <td class="col-qty">${i.qty}</td>
+            <td class="col-price">${i.qty * i.price}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+
+    <div class="print-total">
+      ИТОГО: ${state.order.reduce((s, i) => s + i.qty * i.price, 0)}
+    </div>
+  `;
+
+  document.body.appendChild(printBlock);
+  window.print();
+
+  setTimeout(() => {
+    printBlock.remove();
+  }, 500);
+}
+
 // ===============================
 // HIDE KEYBOARD (TELEGRAM SAFE)
 // ===============================
@@ -277,3 +319,4 @@ function openProducts() {
 // START
 // ===============================
 openPin();
+
