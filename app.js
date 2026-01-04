@@ -1,15 +1,20 @@
 // ===============================
-// HIDE KEYBOARD ON TAP
+// HIDE KEYBOARD (TELEGRAM SAFE)
 // ===============================
-document.addEventListener("touchstart", hideKeyboard, { passive: true });
-document.addEventListener("mousedown", hideKeyboard);
+document.addEventListener("click", (e) => {
+  const el = e.target;
 
-function hideKeyboard(e) {
-  const tag = e.target.tagName;
-  if (tag !== "INPUT" && tag !== "TEXTAREA") {
-    document.activeElement?.blur();
+  // если клик не по input
+  if (
+    el.tagName !== "INPUT" &&
+    el.tagName !== "TEXTAREA"
+  ) {
+    // убираем фокус
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
   }
-}
+});
 
 // TELEGRAM
 const tg = Telegram.WebApp;
