@@ -19,8 +19,8 @@ input {
 }
 
 .table {
-  border-collapse: collapse;
   width: 100%;
+  border-collapse: collapse;
 }
 
 .table th,
@@ -30,21 +30,10 @@ input {
   font-size: 12px;
 }
 
-.col-name {
-  width: 60%;
-}
+.col-name { width: 60%; }
+.col-qty  { width: 15%; text-align: right; }
+.col-price{ width: 25%; text-align: right; }
 
-.col-qty {
-  width: 15%;
-  text-align: right;
-}
-
-.col-price {
-  width: 25%;
-  text-align: right;
-}
-
-/* чек */
 .print-title {
   text-align: center;
   font-weight: 700;
@@ -58,8 +47,8 @@ input {
 
 .print-total {
   margin-top: 6px;
-  font-weight: 700;
-  text-align: right;
   border-top: 1px dashed #000;
   padding-top: 4px;
+  font-weight: 700;
+  text-align: right;
 }
