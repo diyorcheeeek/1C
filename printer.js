@@ -1,1 +1,0 @@
-function printOrder(){window.print()}
