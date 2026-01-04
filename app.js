@@ -9,6 +9,11 @@ document.addEventListener("click", (e) => {
 });
 
 // ===============================
+// CONFIG
+// ===============================
+const APP_PIN = "7000"; // 🔐 4-значный PIN
+
+// ===============================
 // TELEGRAM
 // ===============================
 const tg = Telegram.WebApp;
@@ -18,6 +23,7 @@ tg.ready();
 // STATE
 // ===============================
 const state = {
+  isAuth: false,
   admin: tg.initDataUnsafe?.user?.first_name || "Unknown",
   client: null,
   order: [],
@@ -29,12 +35,12 @@ const state = {
 // MOCK CLIENTS
 // ===============================
 const CLIENTS = [
-  "акбар ака кува",
-  "кори ака коратепа",
-  "опа оввол",
-  "хонобод йол",
-  "кори ака",
-  "ота бола мтс"
+  "ООО Ромашка",
+  "ИП Ахмад",
+  "Магазин Центр",
+  "ООО Восток",
+  "ИП Каримов",
+  "ТОО Almaz Trade"
 ];
 
 // ===============================
@@ -45,9 +51,48 @@ function view(html) {
 }
 
 // ===============================
+// AUTH (PIN)
+// ===============================
+function openPin() {
+  view(`
+    <h2 style="text-align:center">Введите PIN</h2>
+
+    <input
+      id="pinInput"
+      type="password"
+      inputmode="numeric"
+      maxlength="4"
+      placeholder="••••"
+      style="text-align:center;font-size:24px;letter-spacing:10px"
+      oninput="checkPin(this.value)"
+    >
+
+    <p id="pinError" style="color:#ef4444;text-align:center"></p>
+  `);
+
+  setTimeout(() => {
+    document.getElementById("pinInput")?.focus();
+  }, 200);
+}
+
+function checkPin(value) {
+  if (value.length < 4) return;
+
+  if (value === APP_PIN) {
+    state.isAuth = true;
+    openHome();
+  } else {
+    document.getElementById("pinError").innerText = "Неверный PIN";
+    document.getElementById("pinInput").value = "";
+  }
+}
+
+// ===============================
 // HOME
 // ===============================
 function openHome() {
+  if (!state.isAuth) return openPin();
+
   view(`
     <h2>Главный экран</h2>
     <p>Выберите действие снизу</p>
@@ -58,6 +103,8 @@ function openHome() {
 // CREATE / EDIT ORDER
 // ===============================
 function openCreate(isEdit = false) {
+  if (!state.isAuth) return openPin();
+
   view(`
     <h2>${isEdit ? "Редактирование заказа" : "Создать заказ"}</h2>
 
@@ -66,6 +113,7 @@ function openCreate(isEdit = false) {
       placeholder="Поиск клиента"
       value="${state.client || ""}"
       oninput="searchClient(this.value)"
+      autocomplete="off"
     >
     <div id="clientList"></div>
 
@@ -115,7 +163,7 @@ function selectClient(name) {
 }
 
 // ===============================
-// ADD / REMOVE PRODUCT
+// PRODUCTS
 // ===============================
 function addProduct(name) {
   if (!name) return;
@@ -164,7 +212,7 @@ function renderOrder() {
 }
 
 // ===============================
-// SAVE ORDER (NEW / EDIT)
+// SAVE ORDER
 // ===============================
 function saveOrder() {
   const order = {
@@ -190,6 +238,8 @@ function saveOrder() {
 // HISTORY
 // ===============================
 function openHistory() {
+  if (!state.isAuth) return openPin();
+
   view(`
     <h2>История заказов</h2>
 
@@ -208,28 +258,22 @@ function openHistory() {
 }
 
 function editOrder(index) {
+  state.editIndex = index;
   const order = state.history[index];
-  openCreate(order, index);
+  state.order = JSON.parse(JSON.stringify(order.items));
+  state.client = order.client || null;
+  openCreate(true);
 }
 
 // ===============================
 // PRODUCTS
 // ===============================
 function openProducts() {
+  if (!state.isAuth) return openPin();
   view(`<h2>Товары</h2><p>Список товаров</p>`);
-}
-
-function editOrder(index) {
-  state.editIndex = index;
-
-  const order = state.history[index];
-  state.order = JSON.parse(JSON.stringify(order.items));
-  state.client = order.client || null;
-
-  openCreate(true);
 }
 
 // ===============================
 // START
 // ===============================
-openHome();
+openPin();
