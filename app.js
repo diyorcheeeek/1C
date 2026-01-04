@@ -242,47 +242,52 @@ function printOrder() {
     return;
   }
 
-  const block = document.createElement("div");
-  block.id = "printBlock";
+  const total = state.order.reduce((s, i) => s + i.qty * i.price, 0);
 
-  block.innerHTML = `
-    <div class="print-title">BRAND NAME</div>
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Print</title>
+<style>
+  @page { size: 58mm auto; margin: 4mm; }
+  body { font-family: monospace; font-size: 12px; margin: 0; }
+  h3 { text-align: center; margin: 0 0 6px 0; }
+  .meta { margin-bottom: 6px; }
+  table { width: 100%; border-collapse: collapse; }
+  td { padding: 2px 0; }
+  .name { width: 60%; }
+  .qty { width: 15%; text-align: right; }
+  .sum { width: 25%; text-align: right; }
+  .total { border-top: 1px dashed #000; margin-top: 6px; padding-top: 4px; text-align: right; font-weight: bold; }
+</style>
+</head>
+<body onload="window.print()">
+  <h3>BRAND NAME</h3>
+  <div class="meta">
+    ${new Date().toLocaleString()}<br>
+    Админ: ${state.admin}<br>
+    Клиент: ${state.client || "—"}
+  </div>
+  <table>
+    ${state.order.map(i => `
+      <tr>
+        <td class="name">${i.name}</td>
+        <td class="qty">${i.qty}</td>
+        <td class="sum">${i.qty * i.price}</td>
+      </tr>
+    `).join("")}
+  </table>
+  <div class="total">ИТОГО: ${total}</div>
+</body>
+</html>
+`;
 
-    <div class="print-meta">
-      Дата: ${new Date().toLocaleString()}<br>
-      Админ: ${state.admin}<br>
-      Клиент: ${state.client || "—"}
-    </div>
-
-    <table class="table">
-      <tbody>
-        ${state.order.map(i => `
-          <tr>
-            <td class="col-name">${i.name}</td>
-            <td class="col-qty">${i.qty}</td>
-            <td class="col-price">${i.qty * i.price}</td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
-
-    <div class="print-total">
-      ИТОГО: ${state.order.reduce((s, i) => s + i.qty * i.price, 0)}
-    </div>
-  `;
-
-  document.body.appendChild(block);
-
-  // ⬇️ КЛЮЧЕВОЙ ФИКС
-  setTimeout(() => {
-    window.print();
-
-    // чистим после печати
-    setTimeout(() => {
-      block.remove();
-    }, 500);
-
-  }, 150);
+  const w = window.open("", "_blank");
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
 }
 
 // ===============================
