@@ -1,47 +1,5 @@
-function printOrder() {
-  if (!state.order.length) {
-    alert("Нет товаров для печати");
-    return;
-  }
-
-  const printBlock = document.createElement("div");
-  printBlock.id = "printBlock";
-  printBlock.innerHTML = `
-    <div class="print-title">BRAND NAME</div>
-
-    <div class="print-meta">
-      Дата: ${new Date().toLocaleString()}<br>
-      Админ: ${state.admin}<br>
-      Клиент: ${state.client || "—"}
-    </div>
-
-    <table class="table">
-      <tbody>
-        ${state.order.map(i => `
-          <tr>
-            <td class="col-name">${i.name}</td>
-            <td class="col-qty">${i.qty}</td>
-            <td class="col-price">${i.qty * i.price}</td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
-
-    <div class="print-total">
-      ИТОГО: ${state.order.reduce((s, i) => s + i.qty * i.price, 0)}
-    </div>
-  `;
-
-  document.body.appendChild(printBlock);
-  window.print();
-
-  setTimeout(() => {
-    printBlock.remove();
-  }, 500);
-}
-
 // ===============================
-// HIDE KEYBOARD (TELEGRAM SAFE)
+// HIDE KEYBOARD
 // ===============================
 document.addEventListener("click", (e) => {
   const el = e.target;
@@ -53,7 +11,7 @@ document.addEventListener("click", (e) => {
 // ===============================
 // CONFIG
 // ===============================
-const APP_PIN = "7000"; // 🔐 4-значный PIN
+const APP_PIN = "1234";
 
 // ===============================
 // TELEGRAM
@@ -74,7 +32,7 @@ const state = {
 };
 
 // ===============================
-// MOCK CLIENTS
+// CLIENTS (mock 1C)
 // ===============================
 const CLIENTS = [
   "ООО Ромашка",
@@ -86,41 +44,28 @@ const CLIENTS = [
 ];
 
 // ===============================
-// VIEW HELPER
+// VIEW
 // ===============================
 function view(html) {
   document.getElementById("view").innerHTML = html;
 }
 
 // ===============================
-// AUTH (PIN)
+// PIN LOGIN
 // ===============================
 function openPin() {
   view(`
     <h2 style="text-align:center">Введите PIN</h2>
-
-    <input
-      id="pinInput"
-      type="password"
-      inputmode="numeric"
-      maxlength="4"
-      placeholder="••••"
-      style="text-align:center;font-size:24px;letter-spacing:10px"
-      oninput="checkPin(this.value)"
-    >
-
+    <input id="pinInput" type="password" inputmode="numeric"
+      maxlength="4" style="text-align:center;font-size:24px"
+      oninput="checkPin(this.value)">
     <p id="pinError" style="color:#ef4444;text-align:center"></p>
   `);
-
-  setTimeout(() => {
-    document.getElementById("pinInput")?.focus();
-  }, 200);
 }
 
-function checkPin(value) {
-  if (value.length < 4) return;
-
-  if (value === APP_PIN) {
+function checkPin(v) {
+  if (v.length < 4) return;
+  if (v === APP_PIN) {
     state.isAuth = true;
     openHome();
   } else {
@@ -134,15 +79,11 @@ function checkPin(value) {
 // ===============================
 function openHome() {
   if (!state.isAuth) return openPin();
-
-  view(`
-    <h2>Главный экран</h2>
-    <p>Выберите действие снизу</p>
-  `);
+  view(`<h2>Главный экран</h2>`);
 }
 
 // ===============================
-// CREATE / EDIT ORDER
+// CREATE / EDIT
 // ===============================
 function openCreate(isEdit = false) {
   if (!state.isAuth) return openPin();
@@ -150,35 +91,27 @@ function openCreate(isEdit = false) {
   view(`
     <h2>${isEdit ? "Редактирование заказа" : "Создать заказ"}</h2>
 
-    <input
-      id="clientInput"
-      placeholder="Поиск клиента"
+    <input id="clientInput" placeholder="Поиск клиента"
       value="${state.client || ""}"
-      oninput="searchClient(this.value)"
-      autocomplete="off"
-    >
+      oninput="searchClient(this.value)">
     <div id="clientList"></div>
 
     <table class="table">
       <thead>
         <tr>
           <th class="col-name">Товар</th>
-          <th class="col-qty">Кол-во</th>
+          <th class="col-qty">Кол</th>
           <th class="col-price">Цена</th>
         </tr>
       </thead>
       <tbody id="orderTable"></tbody>
     </table>
 
-    <input
-      placeholder="Добавить товар"
-      onkeydown="if(event.key==='Enter'){ addProduct(this.value); this.value=''; }"
-    >
+    <input placeholder="Добавить товар"
+      onkeydown="if(event.key==='Enter'){addProduct(this.value);this.value=''}">
 
-    <button onclick="saveOrder()">
-      💾 ${isEdit ? "Сохранить изменения" : "Сохранить"}
-    </button>
-
+    <button onclick="saveOrder()">💾 Сохранить</button>
+    <button onclick="printOrder()">🖨 Печать</button>
     ${isEdit ? `<button onclick="openHistory()">↩️ Назад</button>` : ""}
   `);
 
@@ -188,55 +121,51 @@ function openCreate(isEdit = false) {
 // ===============================
 // CLIENT SEARCH
 // ===============================
-function searchClient(query) {
+function searchClient(q) {
   const list = document.getElementById("clientList");
-  if (!query) return list.innerHTML = "";
-
-  list.innerHTML = CLIENTS
-    .filter(c => c.toLowerCase().includes(query.toLowerCase()))
-    .map(c => `<div class="list-item" onclick="selectClient('${c}')">${c}</div>`)
-    .join("");
+  if (!q) return list.innerHTML = "";
+  list.innerHTML = CLIENTS.filter(c =>
+    c.toLowerCase().includes(q.toLowerCase())
+  ).map(c => `
+    <div class="list-item" onclick="selectClient('${c}')">${c}</div>
+  `).join("");
 }
 
-function selectClient(name) {
-  state.client = name;
-  document.getElementById("clientInput").value = name;
+function selectClient(c) {
+  state.client = c;
+  document.getElementById("clientInput").value = c;
   document.getElementById("clientList").innerHTML = "";
 }
 
 // ===============================
-// PRODUCTS
+// ORDER
 // ===============================
-function addProduct(name) {
-  if (!name) return;
-  state.order.push({ name, qty: 1, price: 0 });
+function addProduct(n) {
+  if (!n) return;
+  state.order.push({ name: n, qty: 1, price: 0 });
   renderOrder();
 }
 
-function removeProduct(index) {
-  state.order.splice(index, 1);
+function removeProduct(i) {
+  state.order.splice(i, 1);
   renderOrder();
 }
 
-// ===============================
-// RENDER ORDER
-// ===============================
 function renderOrder() {
   let total = 0;
-
-  let rows = state.order.map((item, index) => {
-    total += item.qty * item.price;
+  let rows = state.order.map((i, idx) => {
+    total += i.qty * i.price;
     return `
       <tr>
-        <td class="col-name">${item.name}</td>
+        <td class="col-name">${i.name}</td>
         <td class="col-qty">
-          <input type="number" value="${item.qty}"
-            onchange="state.order[${index}].qty=+this.value||0;renderOrder()">
+          <input type="number" value="${i.qty}"
+            onchange="state.order[${idx}].qty=+this.value||0;renderOrder()">
         </td>
         <td class="col-price">
-          <input type="number" value="${item.price}"
-            onchange="state.order[${index}].price=+this.value||0;renderOrder()">
-          <button class="del-btn" onclick="removeProduct(${index})">✕</button>
+          <input type="number" value="${i.price}"
+            onchange="state.order[${idx}].price=+this.value||0;renderOrder()">
+          <button class="del-btn" onclick="removeProduct(${idx})">✕</button>
         </td>
       </tr>
     `;
@@ -244,9 +173,9 @@ function renderOrder() {
 
   rows += `
     <tr>
-      <td class="col-name" style="font-weight:700;">ИТОГО</td>
-      <td class="col-qty"></td>
-      <td class="col-price" style="font-weight:700;">${total}</td>
+      <td class="col-name"><b>ИТОГО</b></td>
+      <td></td>
+      <td class="col-price"><b>${total}</b></td>
     </tr>
   `;
 
@@ -254,22 +183,22 @@ function renderOrder() {
 }
 
 // ===============================
-// SAVE ORDER
+// SAVE
 // ===============================
 function saveOrder() {
-  const order = {
+  const o = {
     date: new Date().toLocaleString(),
     admin: state.admin,
     client: state.client,
     items: state.order,
-    total: state.order.reduce((s, i) => s + i.qty * i.price, 0)
+    total: state.order.reduce((s,i)=>s+i.qty*i.price,0)
   };
 
   if (state.editIndex !== null) {
-    state.history[state.editIndex] = order;
+    state.history[state.editIndex] = o;
     state.editIndex = null;
   } else {
-    state.history.push(order);
+    state.history.push(o);
   }
 
   localStorage.setItem("history", JSON.stringify(state.history));
@@ -281,30 +210,59 @@ function saveOrder() {
 // ===============================
 function openHistory() {
   if (!state.isAuth) return openPin();
-
   view(`
     <h2>История заказов</h2>
-
-    ${state.history.map((o, i) => `
+    ${state.history.map((o,i)=>`
       <div class="list-item">
-        <b>${o.client || "Без клиента"}</b><br>
+        <b>${o.client||"—"}</b><br>
         ${o.date}<br>
         ${o.admin} — ${o.total}
-
-        <div style="margin-top:8px">
-          <button onclick="editOrder(${i})">✏️ Редактировать</button>
+        <div style="margin-top:6px">
+          <button onclick="editOrder(${i})">✏️</button>
         </div>
       </div>
     `).join("")}
   `);
 }
 
-function editOrder(index) {
-  state.editIndex = index;
-  const order = state.history[index];
-  state.order = JSON.parse(JSON.stringify(order.items));
-  state.client = order.client || null;
+function editOrder(i) {
+  state.editIndex = i;
+  const o = state.history[i];
+  state.order = JSON.parse(JSON.stringify(o.items));
+  state.client = o.client;
   openCreate(true);
+}
+
+// ===============================
+// PRINT
+// ===============================
+function printOrder() {
+  if (!state.order.length) return alert("Нет товаров");
+
+  const block = document.createElement("div");
+  block.innerHTML = `
+    <div class="print-title">BRAND NAME</div>
+    <div class="print-meta">
+      ${new Date().toLocaleString()}<br>
+      Админ: ${state.admin}<br>
+      Клиент: ${state.client||"—"}
+    </div>
+    <table class="table">
+      ${state.order.map(i=>`
+        <tr>
+          <td class="col-name">${i.name}</td>
+          <td class="col-qty">${i.qty}</td>
+          <td class="col-price">${i.qty*i.price}</td>
+        </tr>
+      `).join("")}
+    </table>
+    <div class="print-total">
+      ИТОГО: ${state.order.reduce((s,i)=>s+i.qty*i.price,0)}
+    </div>
+  `;
+  document.body.appendChild(block);
+  window.print();
+  setTimeout(()=>block.remove(),500);
 }
 
 // ===============================
@@ -312,11 +270,10 @@ function editOrder(index) {
 // ===============================
 function openProducts() {
   if (!state.isAuth) return openPin();
-  view(`<h2>Товары</h2><p>Список товаров</p>`);
+  view(`<h2>Товары</h2>`);
 }
 
 // ===============================
 // START
 // ===============================
 openPin();
-
