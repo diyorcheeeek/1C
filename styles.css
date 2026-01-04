@@ -6,7 +6,7 @@ tg.ready();
 document.addEventListener("click", e => {
   if (e.target.tagName !== "INPUT") {
     document.activeElement?.blur();
-  }
+  } 
 });
 
 // ================= STATE =================
