@@ -1,5 +1,5 @@
 // ===============================
-// HIDE KEYBOARD (WORKING)
+// HIDE KEYBOARD (TELEGRAM SAFE)
 // ===============================
 document.addEventListener("click", (e) => {
   const el = e.target;
@@ -56,10 +56,9 @@ function openCreate() {
     <table class="table">
       <thead>
         <tr>
-          <th>Товар</th>
-          <th>Кол-во</th>
-          <th>Цена</th>
-          <th></th>
+          <th class="col-name">Товар</th>
+          <th class="col-qty">Кол-во</th>
+          <th class="col-price">Цена</th>
         </tr>
       </thead>
       <tbody id="orderTable"></tbody>
@@ -67,7 +66,7 @@ function openCreate() {
 
     <input
       placeholder="Добавить товар"
-      onkeydown="if(event.key==='Enter') addProduct(this.value); this.value='';"
+      onkeydown="if(event.key==='Enter'){ addProduct(this.value); this.value=''; }"
     >
 
     <p id="total">Итого: 0</p>
@@ -81,15 +80,13 @@ function openCreate() {
 // ===============================
 function addProduct(name) {
   if (!name) return;
-  state.order.push({ name, qty: 1, price: 0 });
-  renderOrder();
-}
 
-// ===============================
-// REMOVE PRODUCT
-// ===============================
-function removeProduct(index) {
-  state.order.splice(index, 1);
+  state.order.push({
+    name,
+    qty: 1,
+    price: 0
+  });
+
   renderOrder();
 }
 
@@ -105,17 +102,16 @@ function renderOrder() {
 
       return `
         <tr>
-          <td>${item.name}</td>
-          <td>
+          <td class="col-name">${item.name}</td>
+
+          <td class="col-qty">
             <input type="number" value="${item.qty}"
               onchange="state.order[${index}].qty = +this.value || 0; renderOrder()">
           </td>
-          <td>
+
+          <td class="col-price">
             <input type="number" value="${item.price}"
               onchange="state.order[${index}].price = +this.value || 0; renderOrder()">
-          </td>
-          <td>
-            <button onclick="removeProduct(${index})">✕</button>
           </td>
         </tr>
       `;
@@ -136,6 +132,7 @@ function saveOrder() {
 
   state.history.push(order);
   localStorage.setItem("history", JSON.stringify(state.history));
+
   alert("Сохранено");
 }
 
