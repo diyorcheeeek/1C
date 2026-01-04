@@ -9,5 +9,5 @@ function getProducts(query) {
 }
 
 function sendOrderTo1C(order) {
-  console.log("Отправка в 1С", order);
+  console.log("Отправка в 1С", order); 
 }
