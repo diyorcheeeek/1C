@@ -29,12 +29,12 @@ const state = {
 // MOCK CLIENTS
 // ===============================
 const CLIENTS = [
-  "ООО Ромашка",
-  "ИП Ахмад",
-  "Магазин Центр",
-  "ООО Восток",
-  "ИП Каримов",
-  "ТОО Almaz Trade"
+  "акбар ака кува",
+  "кори ака коратепа",
+  "опа оввол",
+  "хонобод йол",
+  "кори ака",
+  "ота бола мтс"
 ];
 
 // ===============================
@@ -57,20 +57,15 @@ function openHome() {
 // ===============================
 // CREATE / EDIT ORDER
 // ===============================
-function openCreate(order = null, index = null) {
-  state.order = order ? JSON.parse(JSON.stringify(order.items)) : [];
-  state.client = order ? order.client : null;
-  state.editIndex = index;
-
+function openCreate(isEdit = false) {
   view(`
-    <h2>${order ? "Редактирование заказа" : "Создать заказ"}</h2>
+    <h2>${isEdit ? "Редактирование заказа" : "Создать заказ"}</h2>
 
     <input
       id="clientInput"
       placeholder="Поиск клиента"
       value="${state.client || ""}"
       oninput="searchClient(this.value)"
-      autocomplete="off"
     >
     <div id="clientList"></div>
 
@@ -90,8 +85,11 @@ function openCreate(order = null, index = null) {
       onkeydown="if(event.key==='Enter'){ addProduct(this.value); this.value=''; }"
     >
 
-    <button onclick="saveOrder()">💾 ${order ? "Сохранить изменения" : "Сохранить"}</button>
-    ${order ? `<button onclick="openHistory()">↩️ Назад</button>` : ""}
+    <button onclick="saveOrder()">
+      💾 ${isEdit ? "Сохранить изменения" : "Сохранить"}
+    </button>
+
+    ${isEdit ? `<button onclick="openHistory()">↩️ Назад</button>` : ""}
   `);
 
   renderOrder();
@@ -179,6 +177,7 @@ function saveOrder() {
 
   if (state.editIndex !== null) {
     state.history[state.editIndex] = order;
+    state.editIndex = null;
   } else {
     state.history.push(order);
   }
@@ -193,11 +192,16 @@ function saveOrder() {
 function openHistory() {
   view(`
     <h2>История заказов</h2>
+
     ${state.history.map((o, i) => `
-      <div class="list-item" onclick="editOrder(${i})">
+      <div class="list-item">
         <b>${o.client || "Без клиента"}</b><br>
         ${o.date}<br>
         ${o.admin} — ${o.total}
+
+        <div style="margin-top:8px">
+          <button onclick="editOrder(${i})">✏️ Редактировать</button>
+        </div>
       </div>
     `).join("")}
   `);
@@ -213,6 +217,16 @@ function editOrder(index) {
 // ===============================
 function openProducts() {
   view(`<h2>Товары</h2><p>Список товаров</p>`);
+}
+
+function editOrder(index) {
+  state.editIndex = index;
+
+  const order = state.history[index];
+  state.order = JSON.parse(JSON.stringify(order.items));
+  state.client = order.client || null;
+
+  openCreate(true);
 }
 
 // ===============================
