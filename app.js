@@ -194,13 +194,18 @@ function openHistory() {
   view(`
     <h2>История заказов</h2>
     ${state.history.map((o, i) => `
-      <div class="list-item" onclick="openCreate(${JSON.stringify(o)}, ${i})">
+      <div class="list-item" onclick="editOrder(${i})">
         <b>${o.client || "Без клиента"}</b><br>
         ${o.date}<br>
         ${o.admin} — ${o.total}
       </div>
     `).join("")}
   `);
+}
+
+function editOrder(index) {
+  const order = state.history[index];
+  openCreate(order, index);
 }
 
 // ===============================
