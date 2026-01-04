@@ -21,11 +21,12 @@ const state = {
   admin: tg.initDataUnsafe?.user?.first_name || "Unknown",
   client: null,
   order: [],
-  history: JSON.parse(localStorage.getItem("history") || "[]")
+  history: JSON.parse(localStorage.getItem("history") || "[]"),
+  editIndex: null
 };
 
 // ===============================
-// MOCK CLIENTS (1C LATER)
+// MOCK CLIENTS
 // ===============================
 const CLIENTS = [
   "ООО Ромашка",
@@ -54,18 +55,20 @@ function openHome() {
 }
 
 // ===============================
-// CREATE ORDER
+// CREATE / EDIT ORDER
 // ===============================
-function openCreate() {
-  state.order = [];
-  state.client = null;
+function openCreate(order = null, index = null) {
+  state.order = order ? JSON.parse(JSON.stringify(order.items)) : [];
+  state.client = order ? order.client : null;
+  state.editIndex = index;
 
   view(`
-    <h2>Создать заказ</h2>
+    <h2>${order ? "Редактирование заказа" : "Создать заказ"}</h2>
 
     <input
       id="clientInput"
       placeholder="Поиск клиента"
+      value="${state.client || ""}"
       oninput="searchClient(this.value)"
       autocomplete="off"
     >
@@ -87,35 +90,24 @@ function openCreate() {
       onkeydown="if(event.key==='Enter'){ addProduct(this.value); this.value=''; }"
     >
 
-    <button onclick="saveOrder()">💾 Сохранить</button>
+    <button onclick="saveOrder()">💾 ${order ? "Сохранить изменения" : "Сохранить"}</button>
+    ${order ? `<button onclick="openHistory()">↩️ Назад</button>` : ""}
   `);
 
   renderOrder();
 }
 
 // ===============================
-// CLIENT SEARCH (1C STYLE)
+// CLIENT SEARCH
 // ===============================
 function searchClient(query) {
   const list = document.getElementById("clientList");
+  if (!query) return list.innerHTML = "";
 
-  if (!query) {
-    list.innerHTML = "";
-    return;
-  }
-
-  const result = CLIENTS.filter(c =>
-    c.toLowerCase().includes(query.toLowerCase())
-  );
-
-  list.innerHTML = result.map(c => `
-    <div
-      class="list-item"
-      onclick="selectClient('${c}')"
-    >
-      ${c}
-    </div>
-  `).join("");
+  list.innerHTML = CLIENTS
+    .filter(c => c.toLowerCase().includes(query.toLowerCase()))
+    .map(c => `<div class="list-item" onclick="selectClient('${c}')">${c}</div>`)
+    .join("");
 }
 
 function selectClient(name) {
@@ -125,49 +117,37 @@ function selectClient(name) {
 }
 
 // ===============================
-// ADD PRODUCT
+// ADD / REMOVE PRODUCT
 // ===============================
 function addProduct(name) {
   if (!name) return;
-
-  state.order.push({
-    name,
-    qty: 1,
-    price: 0
-  });
-
+  state.order.push({ name, qty: 1, price: 0 });
   renderOrder();
 }
 
-// ===============================
-// REMOVE PRODUCT
-// ===============================
 function removeProduct(index) {
   state.order.splice(index, 1);
   renderOrder();
 }
 
 // ===============================
-// RENDER ORDER (TOTAL INSIDE TABLE)
+// RENDER ORDER
 // ===============================
 function renderOrder() {
   let total = 0;
 
   let rows = state.order.map((item, index) => {
     total += item.qty * item.price;
-
     return `
       <tr>
         <td class="col-name">${item.name}</td>
-
         <td class="col-qty">
           <input type="number" value="${item.qty}"
-            onchange="state.order[${index}].qty = +this.value || 0; renderOrder()">
+            onchange="state.order[${index}].qty=+this.value||0;renderOrder()">
         </td>
-
         <td class="col-price">
           <input type="number" value="${item.price}"
-            onchange="state.order[${index}].price = +this.value || 0; renderOrder()">
+            onchange="state.order[${index}].price=+this.value||0;renderOrder()">
           <button class="del-btn" onclick="removeProduct(${index})">✕</button>
         </td>
       </tr>
@@ -186,7 +166,7 @@ function renderOrder() {
 }
 
 // ===============================
-// SAVE ORDER
+// SAVE ORDER (NEW / EDIT)
 // ===============================
 function saveOrder() {
   const order = {
@@ -197,10 +177,14 @@ function saveOrder() {
     total: state.order.reduce((s, i) => s + i.qty * i.price, 0)
   };
 
-  state.history.push(order);
-  localStorage.setItem("history", JSON.stringify(state.history));
+  if (state.editIndex !== null) {
+    state.history[state.editIndex] = order;
+  } else {
+    state.history.push(order);
+  }
 
-  alert("Сохранено");
+  localStorage.setItem("history", JSON.stringify(state.history));
+  openHistory();
 }
 
 // ===============================
@@ -209,14 +193,12 @@ function saveOrder() {
 function openHistory() {
   view(`
     <h2>История заказов</h2>
-    ${state.history.map(o => `
-      <div>
+    ${state.history.map((o, i) => `
+      <div class="list-item" onclick="openCreate(${JSON.stringify(o)}, ${i})">
+        <b>${o.client || "Без клиента"}</b><br>
         ${o.date}<br>
-        ${o.client || "Без клиента"}<br>
-        ${o.admin}<br>
-        Итого: ${o.total}
+        ${o.admin} — ${o.total}
       </div>
-      <hr>
     `).join("")}
   `);
 }
@@ -225,10 +207,7 @@ function openHistory() {
 // PRODUCTS
 // ===============================
 function openProducts() {
-  view(`
-    <h2>Товары</h2>
-    <p>Список товаров</p>
-  `);
+  view(`<h2>Товары</h2><p>Список товаров</p>`);
 }
 
 // ===============================
