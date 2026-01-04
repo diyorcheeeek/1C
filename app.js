@@ -90,6 +90,11 @@ function addProduct(name) {
   renderOrder();
 }
 
+function removeProduct(index) {
+  state.order.splice(index, 1);
+  renderOrder();
+}
+
 // ===============================
 // RENDER ORDER
 // ===============================
@@ -110,11 +115,9 @@ function renderOrder() {
           </td>
 
           <td class="col-price">
-            <div style="display:flex;align-items:center;gap:6px;">
-              <input type="number" value="${item.price}"
-                onchange="state.order[${index}].price = +this.value || 0; renderOrder()">
-              <button class="del-btn" onclick="removeProduct(${index})">✕</button>
-            </div>
+            <input type="number" value="${item.price}"
+              onchange="state.order[${index}].price = +this.value || 0; renderOrder()">
+            <button class="del-btn" onclick="removeProduct(${index})">✕</button>
           </td>
         </tr>
       `;
