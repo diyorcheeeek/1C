@@ -85,3 +85,27 @@ input {
   text-align: center;
   font-size: 14px;
 }
+
+/* ===== TABLE PROPORTIONS (BASE v1+) ===== */
+.col-name {
+  width: 50%;
+  text-align: left;
+}
+
+.col-qty {
+  width: 18%;
+}
+
+.col-price {
+  width: 32%;
+}
+
+.table input {
+  width: 100%;
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  text-align: center;
+}
