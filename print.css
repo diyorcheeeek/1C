@@ -1,0 +1,65 @@
+@page {
+  size: 58mm auto;
+  margin: 4mm;
+}
+
+body {
+  background: #fff !important;
+  color: #000 !important;
+  font-family: monospace;
+  font-size: 12px;
+}
+
+/* скрываем UI */
+.header,
+.bottom-bar,
+button,
+input {
+  display: none !important;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table th,
+.table td {
+  border: none;
+  padding: 2px 0;
+  font-size: 12px;
+}
+
+.col-name {
+  width: 60%;
+}
+
+.col-qty {
+  width: 15%;
+  text-align: right;
+}
+
+.col-price {
+  width: 25%;
+  text-align: right;
+}
+
+/* чек */
+.print-title {
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.print-meta {
+  margin-bottom: 6px;
+  font-size: 11px;
+}
+
+.print-total {
+  margin-top: 6px;
+  font-weight: 700;
+  text-align: right;
+  border-top: 1px dashed #000;
+  padding-top: 4px;
+}
