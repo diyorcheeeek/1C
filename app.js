@@ -69,10 +69,10 @@ function openCreate() {
       onkeydown="if(event.key==='Enter'){ addProduct(this.value); this.value=''; }"
     >
 
-    <p id="total">Итого: 0</p>
-
     <button onclick="saveOrder()">💾 Сохранить</button>
   `);
+
+  renderOrder();
 }
 
 // ===============================
@@ -90,40 +90,53 @@ function addProduct(name) {
   renderOrder();
 }
 
+// ===============================
+// REMOVE PRODUCT
+// ===============================
 function removeProduct(index) {
   state.order.splice(index, 1);
   renderOrder();
 }
 
 // ===============================
-// RENDER ORDER
+// RENDER ORDER (TOTAL INSIDE TABLE)
 // ===============================
 function renderOrder() {
   let total = 0;
 
-  document.getElementById("orderTable").innerHTML =
-    state.order.map((item, index) => {
-      total += item.qty * item.price;
+  let rows = state.order.map((item, index) => {
+    total += item.qty * item.price;
 
-      return `
-        <tr>
-          <td class="col-name">${item.name}</td>
+    return `
+      <tr>
+        <td class="col-name">${item.name}</td>
 
-          <td class="col-qty">
-            <input type="number" value="${item.qty}"
-              onchange="state.order[${index}].qty = +this.value || 0; renderOrder()">
-          </td>
+        <td class="col-qty">
+          <input type="number" value="${item.qty}"
+            onchange="state.order[${index}].qty = +this.value || 0; renderOrder()">
+        </td>
 
-          <td class="col-price">
-            <input type="number" value="${item.price}"
-              onchange="state.order[${index}].price = +this.value || 0; renderOrder()">
-            <button class="del-btn" onclick="removeProduct(${index})">✕</button>
-          </td>
-        </tr>
-      `;
-    }).join("");
+        <td class="col-price">
+          <input type="number" value="${item.price}"
+            onchange="state.order[${index}].price = +this.value || 0; renderOrder()">
+          <button class="del-btn" onclick="removeProduct(${index})">✕</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
 
-  document.getElementById("total").innerText = "Итого: " + total;
+  // итоговая строка
+  rows += `
+    <tr>
+      <td class="col-name" style="font-weight:700;">ИТОГО</td>
+      <td class="col-qty"></td>
+      <td class="col-price" style="font-weight:700;">
+        ${total}
+      </td>
+    </tr>
+  `;
+
+  document.getElementById("orderTable").innerHTML = rows;
 }
 
 // ===============================
@@ -133,7 +146,8 @@ function saveOrder() {
   const order = {
     date: new Date().toLocaleString(),
     admin: state.admin,
-    items: state.order
+    items: state.order,
+    total: state.order.reduce((s, i) => s + i.qty * i.price, 0)
   };
 
   state.history.push(order);
@@ -151,7 +165,8 @@ function openHistory() {
     ${state.history.map(o => `
       <div>
         ${o.date}<br>
-        ${o.admin}
+        ${o.admin}<br>
+        Итого: ${o.total}
       </div>
       <hr>
     `).join("")}
