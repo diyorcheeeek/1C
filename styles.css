@@ -1,196 +1,87 @@
-// ================= TELEGRAM =================
-const tg = Telegram.WebApp;
-tg.ready();
-
-// =============== HIDE KEYBOARD ===============
-document.addEventListener("click", e => {
-  if (e.target.tagName !== "INPUT") {
-    document.activeElement?.blur();
-  } 
-});
-
-// ================= STATE =================
-const state = {
-  admin: tg.initDataUnsafe?.user?.first_name || "Unknown",
-  client: null,
-  order: [],
-  history: JSON.parse(localStorage.getItem("history") || "[]")
-};
-
-// ================= MOCK API (1C) =================
-function apiClients(q=""){
-  return ["ООО Ромашка","ИП Ахмад","Склад Центр"]
-    .filter(c=>c.toLowerCase().includes(q.toLowerCase()));
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-function apiProducts(q=""){
-  return [
-    {name:"Товар A"},
-    {name:"Товар B"},
-    {name:"Товар C"}
-  ].filter(p=>p.name.toLowerCase().includes(q.toLowerCase()));
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(180deg, #0b1220, #020617);
+  color: #ffffff;
 }
 
-// ================= NAV =================
-function view(html){
-  document.getElementById("view").innerHTML = html;
+/* HEADER */
+.header {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+  backdrop-filter: blur(16px);
+  background: rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
-function openHome(){
-  view(`<h2>Главный экран</h2>`);
+/* MAIN */
+#view {
+  padding: 16px;
+  padding-bottom: 100px;
 }
 
-// ================= CREATE ORDER =================
-function openCreate(){
-  state.order=[];
-  state.client=null;
-
-  view(`
-<button class="back" onclick="openHome()">← Назад</button>
-
-<input placeholder="Поиск клиента" oninput="searchClient(this.value)">
-<div id="clients"></div>
-
-<input id="productSearch" placeholder="Поиск товара"
-       oninput="searchProducts(this.value)">
-<div id="productList"></div>
-
-<table class="table">
-<thead>
-<tr>
-<th class="col-name">Товар</th>
-<th class="col-qty">Кол</th>
-<th class="col-price">Цена</th>
-<th class="col-del"></th>
-</tr>
-</thead>
-<tbody id="order"></tbody>
-</table>
-
-<div class="total" id="total">Итого: 0</div>
-
-<div class="actions">
-<button class="secondary" onclick="saveOrder()">💾 Сохранить</button>
-<button class="primary" onclick="window.print()">🖨 Печать</button>
-</div>
-`);
+/* BOTTOM BAR */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 72px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  backdrop-filter: blur(16px);
+  background: rgba(255,255,255,0.08);
 }
 
-function searchClient(q){
-  document.getElementById("clients").innerHTML =
-    apiClients(q).map(c =>
-      `<div class="list-item" onclick="selectClient('${c}')">${c}</div>`
-    ).join("");
+.bottom-bar button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 22px;
 }
 
-function selectClient(c){
-  state.client=c;
-  document.getElementById("clients").innerHTML="";
+.bottom-bar .center {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #22c55e;
+  color: #020617;
+  font-size: 30px;
+  font-weight: 700;
 }
 
-// ---------- PRODUCTS ----------
-function searchProducts(q){
-  document.getElementById("productList").innerHTML =
-    apiProducts(q).map(p =>
-      `<div class="list-item" onclick="addProduct('${p.name}')">${p.name}</div>`
-    ).join("");
+/* INPUT */
+input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
 }
 
-function addProduct(name){
-  state.order.push({name,qty:1,price:0});
-  document.getElementById("productSearch").value="";
-  document.getElementById("productList").innerHTML="";
-  renderOrder();
+/* TABLE */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
 }
 
-function removeItem(i){
-  state.order.splice(i,1);
-  renderOrder();
+.table th,
+.table td {
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 8px;
+  text-align: center;
+  font-size: 14px;
 }
-
-function renderOrder(){
-  let total=0;
-
-  document.getElementById("order").innerHTML =
-    state.order.map((i,idx)=>{
-      total+=i.qty*i.price;
-      return `
-<tr>
-<td class="col-name">${i.name}</td>
-<td class="col-qty">
-  <input type="number" value="${i.qty}"
-    onchange="state.order[${idx}].qty=+this.value||0;renderOrder()">
-</td>
-<td class="col-price">
-  <input type="number" value="${i.price}"
-    onchange="state.order[${idx}].price=+this.value||0;renderOrder()">
-</td>
-<td class="col-del">
-  <button onclick="removeItem(${idx})">✕</button>
-</td>
-</tr>`;
-    }).join("");
-
-  document.getElementById("total").innerText="Итого: "+total;
-}
-
-// ================= SAVE =================
-function saveOrder(){
-  const order={
-    date:new Date().toLocaleString(),
-    admin:state.admin,
-    client:state.client,
-    items:state.order,
-    total:state.order.reduce((s,i)=>s+i.qty*i.price,0)
-  };
-  state.history.push(order);
-  localStorage.setItem("history",JSON.stringify(state.history));
-  alert("Сохранено");
-}
-
-// ================= HISTORY =================
-function openHistory(){
-  view(`
-<button class="back" onclick="openHome()">← Назад</button>
-<input placeholder="Фильтр по клиенту" oninput="filterHistory(this.value)">
-<div id="history"></div>
-`);
-  renderHistory(state.history);
-}
-
-function renderHistory(list){
-  document.getElementById("history").innerHTML =
-    list.map(o=>`
-<div class="list-item">
-<b>${o.client}</b><br>
-${o.date}<br>
-${o.admin} — ${o.total}
-</div>`).join("");
-}
-
-function filterHistory(q){
-  renderHistory(state.history.filter(o =>
-    o.client?.toLowerCase().includes(q.toLowerCase())
-  ));
-}
-
-// ================= PRODUCTS =================
-function openProducts(){
-  view(`
-<button class="back" onclick="openHome()">← Назад</button>
-<input placeholder="Поиск товара" oninput="renderProducts(this.value)">
-<table class="table">
-<thead><tr><th>Товар</th></tr></thead>
-<tbody id="products"></tbody>
-</table>
-`);
-  renderProducts("");
-}
-
-function renderProducts(q){
-  document.getElementById("products").innerHTML =
-    apiProducts(q).map(p=>`<tr><td>${p.name}</td></tr>`).join("");
-}
-
-// ================= START =================
-openHome();
