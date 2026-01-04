@@ -110,8 +110,11 @@ function renderOrder() {
           </td>
 
           <td class="col-price">
-            <input type="number" value="${item.price}"
-              onchange="state.order[${index}].price = +this.value || 0; renderOrder()">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <input type="number" value="${item.price}"
+                onchange="state.order[${index}].price = +this.value || 0; renderOrder()">
+              <button class="del-btn" onclick="removeProduct(${index})">✕</button>
+            </div>
           </td>
         </tr>
       `;
