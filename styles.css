@@ -123,3 +123,19 @@ input {
   font-weight: 700;
   cursor: pointer;
 }
+
+/* фикс для таблицы */
+.table {
+  table-layout: fixed;
+}
+
+/* кнопка удаления внутри цены */
+.del-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 18px;
+  font-weight: 700;
+  margin-left: 6px;
+  cursor: pointer;
+}
