@@ -41,8 +41,8 @@ const products = [
         id: 6,
         name: "Ramadan Box",
         desc: "Специальный набор для ифтара",
-        price: 25000,
-        image: "https://images.unsplash.com/photo-1586715697380-008066580556?q=80&w=800&auto=format&fit=crop",
+        price: 170000,
+        image: "images/ramadan.jpg",
         badge: "Ramadan Edition"
     }
 ];
