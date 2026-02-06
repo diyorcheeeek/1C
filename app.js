@@ -7,7 +7,7 @@ const products = [
         name: "Пирожное 'Картошка'",
         desc: "Классический вкус в премиальном исполнении",
         price: 25000,
-        image: "images/bananovaya kartoshka.png"
+        image: "images/kartoshka.png"
     },
     {
         id: 2,
@@ -21,21 +21,21 @@ const products = [
         name: "Баунти",
         desc: "Нежная кокосовая начинка и молочный шоколад",
         price: 25000,
-        image: "images/baunti.png"
+        image: "images/bounty.png"
     },
     {
         id: 4,
         name: "Фисташковый Трюфель",
         desc: "Изысканные трюфели с натуральной фисташкой",
         price: 25000,
-        image: "images/Два трюфеля с фисташками.png"
+        image: "images/truffles.png"
     },
     {
         id: 5,
         name: "Банановое наслаждение",
         desc: "Экзотический вкус спелого банана",
         price: 25000,
-        image: "images/bananovaya kartoshka.png"
+        image: "images/kartoshka.png"
     },
     {
         id: 6,
