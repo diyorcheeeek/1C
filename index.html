@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choco Aura | Premium Chocolate Desserts | Fergana</title>
+    <meta name="description"
+        content="Premium chocolate desserts in Fergana. Handmade, luxury quality, unique flavors. Choco Aura Patisserie.">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+    <!-- Header / Nav -->
+    <header id="header">
+        <div class="container nav">
+            <a href="#" class="logo">Choco Aura</a>
+            <div class="nav-links">
+                <a href="#catalog">Каталог</a>
+                <a href="#about">О нас</a>
+                <a href="#contacts">Контакты</a>
+            </div>
+            <button class="cart-icon" id="cart-toggle">
+                <i data-lucide="shopping-bag"></i>
+                <span class="cart-count">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content container">
+            <p>Premium Patisserie</p>
+            <h1>Choco Aura</h1>
+            <p>Ручная работа • Натуральные ингредиенты • Доставка по Фергане</p>
+            <a href="#catalog" class="btn-primary">Смотреть каталог</a>
+        </div>
+    </section>
+
+    <!-- Catalog -->
+    <section id="catalog" class="container reveal">
+        <div class="section-title">
+            <p>Эксклюзивный выбор</p>
+            <h2>Наши Десерты</h2>
+        </div>
+        <div class="product-grid" id="product-grid">
+            <!-- Products will be injected by JavaScript -->
+        </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="container reveal">
+        <div class="section-title">
+            <p>Философия бренда</p>
+            <h2>Искусство вкуса</h2>
+        </div>
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <p style="font-size: 1.2rem; margin-bottom: 2rem;">
+                Мы верим, что десерт — это не просто еда, а мгновение истинного наслаждения.
+                В Choco Aura мы используем только премиальные ингредиенты, следуя традициям
+                высокого кондитерского искусства и адаптируя их под современные тренды.
+            </p>
+            <p style="color: var(--text-secondary);">
+                Handmade • Halal • Ramadan Selection
+            </p>
+        </div>
+    </section>
+
+    <!-- Contacts -->
+    <section id="contacts" class="container reveal" style="padding: var(--spacing-lg) 0;">
+        <div class="section-title">
+            <p>Связаться с нами</p>
+            <h2>Заказать сейчас</h2>
+        </div>
+        <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 2rem;">
+            <a href="#" class="btn-add" style="width: auto; padding: 1rem 2rem;">Telegram</a>
+            <a href="#" class="btn-add" style="width: auto; padding: 1rem 2rem;">WhatsApp</a>
+            <a href="#" class="btn-add" style="width: auto; padding: 1rem 2rem;">Instagram</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="padding: var(--spacing-md) 0; border-top: 1px solid rgba(0,0,0,0.05); text-align: center;">
+        <div class="container">
+            <p>&copy; 2024 Choco Aura. Премиальные десерты Фергана.</p>
+        </div>
+    </footer>
+
+    <!-- Cart Drawer -->
+    <div class="overlay" id="overlay"></div>
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-header">
+            <h3 class="font-luxury">Ваша корзина</h3>
+            <button class="cart-close" id="cart-close">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- Cart items will be injected here -->
+            <p style="text-align: center; margin-top: 2rem; opacity: 0.5;">Корзина пуста</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Итого:</span>
+                <span id="cart-total-price">0 UZS</span>
+            </div>
+            <button class="btn-checkout" id="checkout-btn">Оформить заказ</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
